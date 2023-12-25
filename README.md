@@ -22,7 +22,7 @@ yarn dev
 yarn build
 ```
 
-## 更新考古題資料
+## 更新考古題連結
 
 ```bash
 yarn update-data
