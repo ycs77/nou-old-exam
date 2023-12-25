@@ -4,6 +4,7 @@ export default ycs77(
   {
     vue: true,
     typescript: true,
+    ignores: ['data/*.json'],
   },
   {
     files: [GLOB_TS, GLOB_VUE],

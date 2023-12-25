@@ -1,35 +1,29 @@
-# Nuxt 3 Minimal Starter
+# 國立空中大學 考古題查詢
 
-Look at the [Nuxt 3 documentation](https://nuxt.com/docs/getting-started/introduction) to learn more.
+使用 Nuxt 3 建立的考古題查詢網站，資料來自於 [國立空中大學 - 歷屆考題](https://www.nou.edu.tw/fdcont.aspx?id=YIoy1wZdQ6M=)。
 
-## Setup
+## 安裝
 
-Make sure to install the dependencies:
+安裝依賴套件：
 
 ```bash
 yarn install
 ```
 
-## Development Server
-
-Start the development server on `http://localhost:3000`:
+啟動本地開發伺服器 `http://localhost:3000`：
 
 ```bash
 yarn dev
 ```
 
-## Production
-
-Build the application for production:
+## 線上環境
 
 ```bash
 yarn build
 ```
 
-Locally preview production build:
+## 更新考古題資料
 
 ```bash
-yarn preview
+yarn update-data
 ```
-
-Check out the [deployment documentation](https://nuxt.com/docs/getting-started/deployment) for more information.
