@@ -71,18 +71,18 @@
                 </div>
                 <div class="space-x-2">
                   <a
-                    v-if="exam.first"
                     :href="exam.first"
                     target="_blank"
                     class="inline-flex text-sky-500 hover:text-sky-400 text-sm"
+                    :class="{ invisible: !exam.first }"
                   >
                     正參
                   </a>
                   <a
-                    v-if="exam.second"
                     :href="exam.second"
                     target="_blank"
                     class="inline-flex text-sky-500 hover:text-sky-400 text-sm"
+                    :class="{ invisible: !exam.second }"
                   >
                     副參
                   </a>
@@ -97,6 +97,7 @@
                   <button
                     type="button"
                     class="inline-flex text-sky-500 hover:text-sky-400 text-sm"
+                    :class="{ invisible: exams.length === 0 }"
                     @click="gotoCourceAllExams('first', exams)"
                   >
                     正參
@@ -104,6 +105,7 @@
                   <button
                     type="button"
                     class="inline-flex text-sky-500 hover:text-sky-400 text-sm"
+                    :class="{ invisible: exams.length === 0 }"
                     @click="gotoCourceAllExams('second', exams)"
                   >
                     副參
