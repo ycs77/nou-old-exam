@@ -1,5 +1,5 @@
 <template>
-  <div class="container py-8">
+  <div class="container pt-8 pb-12">
     <h1 class="text-sky-900 text-3xl text-center font-bold">國立空中大學 考古題查詢</h1>
 
     <div class="mt-6">
