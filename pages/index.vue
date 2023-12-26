@@ -46,7 +46,7 @@
         <h4 class="text-sky-600 text-lg font-bold">搜尋結果：</h4>
         <ul class="mt-2 border border-gray-300 divide-y divide-gray-300 rounded-md overflow-hidden">
           <li
-            v-for="{ course, department, exams } in groupedExamsWithCourse"
+            v-for="{ course, department, examGroups } in groupedExamsWithCourse"
             :key="course"
             class="grid grid-cols-12 divide-x divide-gray-300"
           >
@@ -61,57 +61,63 @@
             </div>
 
             <ul class="col-span-8 divide-y divide-gray-300">
-              <li
-                v-for="exam in exams"
-                :key="exam.semesterKey"
-                class="px-4 py-2 flex justify-between items-center"
+              <template
+                v-for="{ examType, exams } in examGroups"
+                :key="examType"
               >
-                <div class="text-sm text-gray-500">
-                  {{ exam.semester }} - {{ exam.examType === 'midterm' ? '期中考' : '期末考' }}
-                </div>
-                <div class="space-x-2">
-                  <a
-                    :href="exam.first"
-                    target="_blank"
-                    class="inline-flex text-sky-500 hover:text-sky-400 text-sm"
-                    :class="{ invisible: !exam.first }"
-                  >
-                    正參
-                  </a>
-                  <a
-                    :href="exam.second"
-                    target="_blank"
-                    class="inline-flex text-sky-500 hover:text-sky-400 text-sm"
-                    :class="{ invisible: !exam.second }"
-                  >
-                    副參
-                  </a>
-                </div>
-              </li>
+                <li class="px-4 py-2 flex justify-between items-center bg-gray-50">
+                  <div class="text-gray-500 text-sm">
+                    {{ examType === 'midterm' ? '期中考' : '期末考' }}
+                  </div>
+                  <div class="space-x-2">
+                    <Tootip>開啟全部</Tootip>
+                    <button
+                      type="button"
+                      class="inline-flex text-sky-500 hover:text-sky-400 text-sm"
+                      :class="{ invisible: exams.length === 0 }"
+                      @click="gotoCourceAllExams(examType, 'first', exams)"
+                    >
+                      正參
+                    </button>
+                    <button
+                      type="button"
+                      class="inline-flex text-sky-500 hover:text-sky-400 text-sm"
+                      :class="{ invisible: exams.length === 0 }"
+                      @click="gotoCourceAllExams(examType, 'second', exams)"
+                    >
+                      副參
+                    </button>
+                  </div>
+                </li>
 
-              <li class="px-4 py-2 flex justify-between items-center bg-gray-50">
-                <div class="text-sm text-gray-500">
-                  開啟全部
-                </div>
-                <div class="space-x-2">
-                  <button
-                    type="button"
-                    class="inline-flex text-sky-500 hover:text-sky-400 text-sm"
-                    :class="{ invisible: exams.length === 0 }"
-                    @click="gotoCourceAllExams('first', exams)"
-                  >
-                    正參
-                  </button>
-                  <button
-                    type="button"
-                    class="inline-flex text-sky-500 hover:text-sky-400 text-sm"
-                    :class="{ invisible: exams.length === 0 }"
-                    @click="gotoCourceAllExams('second', exams)"
-                  >
-                    副參
-                  </button>
-                </div>
-              </li>
+                <li
+                  v-for="exam in exams"
+                  :key="exam.semesterKey"
+                  class="px-4 py-2 flex justify-between items-center"
+                >
+                  <div class="text-sm text-gray-500">
+                    {{ exam.semester }} - {{ exam.examType === 'midterm' ? '期中考' : '期末考' }}
+                  </div>
+                  <div class="space-x-2">
+                    <a
+                      :href="exam.first"
+                      target="_blank"
+                      class="inline-flex text-sky-500 hover:text-sky-400 text-sm"
+                      :class="{ invisible: !exam.first }"
+                    >
+                      正參
+                    </a>
+                    <a
+                      :href="exam.second"
+                      target="_blank"
+                      class="inline-flex text-sky-500 hover:text-sky-400 text-sm"
+                      :class="{ invisible: !exam.second }"
+                    >
+                      副參
+                    </a>
+                  </div>
+                </li>
+              </template>
             </ul>
           </li>
         </ul>
@@ -149,7 +155,7 @@
 
 <script setup lang="ts">
 import groupBy from 'lodash.groupby'
-import type { Exam, GroupedExam } from '~/scripts/types'
+import type { Exam, ExamType, GroupedExam } from '~/scripts/types'
 
 const keyword = ref('')
 const autocompleteList = ref<string[]>([])
@@ -161,21 +167,30 @@ const isCompositionTyping = ref(false)
 const groupedExamsWithCourse = computed(() => {
   return Object.entries(groupBy(exams.value, 'course'))
     .map(([course, exams]) => {
-      const newExams = exams.map(exam => ({
-        ...exam,
-        semesterKey: Number.parseInt([
-          exam.semester.match(/^\d+/)?.[0] ?? 0,
-          exam.examType === 'midterm' ? 1 : 2,
-        ].filter(Boolean).join('')),
-      } satisfies GroupedExam))
+      const department = exams[0].department
 
-      newExams.sort((a, b) => a.semesterKey - b.semesterKey)
+      const newExams = exams
+        .map(exam => ({
+          ...exam,
+          semesterKey: Number.parseInt([
+            exam.semester.match(/^\d+/)?.[0] ?? 0,
+            exam.examType === 'midterm' ? 1 : 2,
+          ].filter(Boolean).join('')),
+        } satisfies GroupedExam as GroupedExam))
+        .toSorted((a, b) => a.semesterKey - b.semesterKey)
 
-      return {
-        course,
-        department: exams[0].department,
-        exams: newExams,
-      }
+      const examGroups = [
+        {
+          examType: 'midterm' as ExamType,
+          exams: newExams.filter(exam => exam.examType === 'midterm'),
+        },
+        {
+          examType: 'final' as ExamType,
+          exams: newExams.filter(exam => exam.examType === 'final'),
+        },
+      ]
+
+      return { course, department, examGroups }
     })
 })
 
@@ -207,11 +222,12 @@ async function applyRecentlySearch(item: string) {
   await search()
 }
 
-function gotoCourceAllExams(type: 'first' | 'second', exams: Exam[]) {
+function gotoCourceAllExams(examType: ExamType, urlType: 'first' | 'second', exams: Exam[]) {
   exams
-    .filter(exam => exam[type])
+    .filter(exam => exam.examType === examType)
+    .filter(exam => exam[urlType])
     .forEach(exam => {
-      window.open(exam[type]!, '_blank', 'noopener')
+      window.open(exam[urlType]!, '_blank', 'noopener')
     })
 }
 
