@@ -188,7 +188,7 @@ const groupedExamsWithCourse = computed(() => {
           examType: 'final' as ExamType,
           exams: newExams.filter(exam => exam.examType === 'final'),
         },
-      ]
+      ].filter(({ exams }) => exams.length > 0)
 
       return { course, department, examGroups }
     })
