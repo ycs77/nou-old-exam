@@ -1,0 +1,25 @@
+name: Update Exams Data
+
+on:
+  schedule:
+    - cron: '0 0 1 2,8 *' # 每年的 2 月 1 日和 8 月 1 日
+
+jobs:
+  cron:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v3
+
+      - uses: actions/setup-node@v3
+        with:
+          node-version: 20
+          cache: yarn
+
+      - run: yarn
+      - run: yarn update-data
+
+      - name: Commit updated data
+        uses: EndBug/add-and-commit@v9
+        with:
+          message: Auto-update data
