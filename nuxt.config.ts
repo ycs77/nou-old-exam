@@ -16,12 +16,5 @@ export default defineNuxtConfig({
     '@vueuse/nuxt',
     '@nuxtjs/tailwindcss',
   ],
-  vite: {
-    vue: {
-      script: {
-        defineModel: true,
-      },
-    },
-  },
   devtools: { enabled: true },
 })
