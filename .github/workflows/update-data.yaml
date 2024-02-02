@@ -1,6 +1,7 @@
 name: Update Exams Data
 
 on:
+  workflow_dispatch:
   schedule:
     - cron: '0 0 1 2,8 *' # 每年的 2 月 1 日和 8 月 1 日
 
@@ -9,7 +10,7 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
 
       - uses: actions/setup-node@v3
         with:
