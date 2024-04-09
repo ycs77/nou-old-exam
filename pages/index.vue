@@ -28,14 +28,14 @@
       </form>
 
       <ClientOnly>
-        <div class="mt-1">
+        <div class="mt-1 flex items-center justify-end">
           <button
             v-if="exams.length"
             type="button"
-            class="text-gray-400 text-sm"
+            class="text-gray-400 hover:text-sky-500 hover:underline text-sm"
             @click="clear()"
           >
-            清除搜尋結果
+            × 清除搜尋結果
           </button>
         </div>
       </ClientOnly>
@@ -128,10 +128,10 @@
           <h4 class="text-sky-600 text-lg font-bold">最近搜尋：</h4>
           <button
             type="button"
-            class="text-gray-400 text-sm"
+            class="text-gray-400 hover:text-sky-500 hover:underline text-sm"
             @click="clearRecentlySearch()"
           >
-            清除最近搜尋
+            × 清除最近搜尋
           </button>
         </div>
         <ul class="mt-2 border border-gray-300 divide-y divide-gray-300 rounded-md overflow-hidden">
