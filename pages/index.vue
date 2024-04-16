@@ -157,6 +157,10 @@
 import groupBy from 'lodash.groupby'
 import type { Exam, ExamType, GroupedExam } from '~/scripts/types'
 
+useHead({
+  title: '國立空中大學 考古題查詢',
+})
+
 const keyword = ref('')
 const autocompleteList = ref<string[]>([])
 const recentlySearch = useLocalStorage<string[]>('nou-old-exam:recentlySearch', [])
